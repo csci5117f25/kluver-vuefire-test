@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useCollection, useDocument } from 'vuefire'
-import { collection, doc } from 'firebase/firestore'
+import { collection, doc, updateDoc } from 'firebase/firestore'
 import {db} from '../firebase_conf'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -14,11 +14,23 @@ const test_source = computed(() =>
 
 const test = useDocument(test_source)
 
+const edit_text = ref("")
+const edit_mode = ref(false)
+
 watch(test, (new_data, old_data)=>{
   if (! new_data) {
     router.push("/")
+  } else {
+    edit_mode.value = false
+    edit_text.value = new_data.name
   }
 })
+
+async function update() {
+  await updateDoc(test_source.value, {name:edit_text.value})
+  edit_mode.value = false
+}
+
 </script>
 
 <template>
@@ -26,7 +38,10 @@ watch(test, (new_data, old_data)=>{
       <RouterLink :to="{ name: 'test_w_id', params: { id: '78bhKDifBy1sbZodcdZp' } }">other test</RouterLink>
       <RouterLink :to="{ name: 'test_w_id', params: { id: '12' } }">third test</RouterLink>
 
-    {{test}}
+    <div v-if="!edit_mode">{{test}} <span @click="edit_mode = true">(edit)</span></div>
+    <div v-if="edit_mode">
+      <input v-model="edit_text"><button @click="update()">save</button>
+    </div>
 </template>
 
 <style scoped></style>
