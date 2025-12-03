@@ -8,7 +8,7 @@ function pushTest() {
    Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
             const messaging = getMessaging(firebaseApp);
-            getToken(messaging, {vapidKey: "BCC5czufa_EMeNvLOgbv7iB18H5sj8jtxUyMhmymKoHCzwZZMEsajZjKRRfDuvYAmRvEhrqeB2RhgCOcJ4TsbDU	"})
+            getToken(messaging, {vapidKey: "BCC5czufa_EMeNvLOgbv7iB18H5sj8jtxUyMhmymKoHCzwZZMEsajZjKRRfDuvYAmRvEhrqeB2RhgCOcJ4TsbDU"})
             .then(console.log)
       }
     }
